@@ -11,5 +11,6 @@ setup(
     version=get_git_version(),
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['distribute'],
+    install_requires=['distribute', 'django-model-utils>=1.2.0',
+                      'django-tagging==0.3.1'],
 )
