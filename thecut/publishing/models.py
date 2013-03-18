@@ -74,8 +74,8 @@ class Content(PublishableResource):
         default='',
         help_text='Optional short description for use by search engines.')
     tags = TagField(
-        null=True,
         blank=True,
+        default='',
         help_text='Separate tags with spaces, put quotes around multiple-word '
                   'tags.')
 
