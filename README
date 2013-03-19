@@ -4,6 +4,9 @@ The Cut Django App: Publishing
 thecut.publishing
 =================
 
+This application requires ``thecut.authorship``.
+
+
 To install this application (whilst in the project's activated virtualenv)::
     pip install git+ssh://git@git.thecut.net.au/thecut-publishing
 
