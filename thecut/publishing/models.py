@@ -5,7 +5,7 @@ from django.db import models
 from django.utils import timezone
 from model_utils.managers import PassThroughManager
 from tagging.fields import TagField
-from thecut.authorship.models import AbstractAuthorshipModel
+from thecut.authorship.models import Authorship
 from thecut.publishing import settings, querysets, utils
 
 
@@ -15,7 +15,7 @@ except ImportError:
     from thecut.publishing.utils import python_2_unicode_compatible
 
 
-class PublishableResource(AbstractAuthorshipModel):
+class PublishableResource(Authorship):
     """Abstract resource model with publishing related fields.
 
     """
