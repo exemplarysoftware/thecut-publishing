@@ -13,3 +13,23 @@ To install this application (whilst in the project's activated virtualenv)::
 
 There is no need to add ``thecut.publishing`` to your project's
 ``INSTALLED_APPS`` setting, as it provides only abstract models.
+
+
+Testing
+=======
+
+To run the project's tests, first set up a virtual environment for running the
+tests::
+    virtualenv /path/to/virtual/environment
+    source /path/to/virtual/environment/bin/activate
+
+To run the tests for your current environemt::
+    make test
+
+To run the tests against Python versions 2.6, 2.7 and 3.4::
+    make test-all
+
+Note that if you've changed the packages that are required for the app, you'll
+need to re-build the tox environment from scratch (see
+https://bitbucket.org/hpk42/tox/issue/149/virtualenv-is-not-recreated-when-deps)::
+    tox --recreate
