@@ -17,6 +17,7 @@ try:
             "django.contrib.contenttypes",
             "django.contrib.sites",
             "thecut.publishing",
+            "test_app",
         ],
         SITE_ID=1,
         NOSE_ARGS=['-s'],
