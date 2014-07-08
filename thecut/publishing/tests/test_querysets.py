@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+from django.contrib.sites.models import Site
 from django.test import TestCase
 from django.utils import timezone
 from datetime import timedelta
@@ -7,7 +8,8 @@ from freezegun import freeze_time
 from mock import Mock
 from test_app.models import (
     ConcreteContent, ConcreteContentFactory, ConcretePublishableResource,
-    ConcretePublishableResourceFactory)
+    ConcretePublishableResourceFactory, ConcreteSiteContent,
+    ConcreteSiteContentFactory, SiteFactory)
 
 
 class TestPublishableResourceQuerySetFeatured(TestCase):
@@ -74,9 +76,30 @@ class TestContentQuerySetIndexable(TestCase):
     def test_calls_active_on_self(self):
         # Ensure we're also filtering inactive content out of the results when
         # finding indexable content.
-        indexable = ConcreteContentFactory(is_indexable=True)
         ConcreteContent.objects.active = Mock()
 
-        queryset = ConcreteContent.objects.indexable()
+        ConcreteContent.objects.indexable()
 
         self.assertTrue(ConcreteContent.objects.active.called_once)
+
+
+class TestSiteContentQuerySetCurrentSite(TestCase):
+
+    def test_includes_content_whose_site_matches_the_current_site(self):
+        content = ConcreteSiteContentFactory()
+        Site.objects.get_current = Mock(return_value=content.site)
+
+        queryset = ConcreteSiteContent.objects.current_site()
+
+        self.assertIn(content, queryset)
+
+    def test_excludes_content_whose_site_does_not_match_the_current_site(self):
+        content = ConcreteSiteContentFactory()
+        # Pretend our site content belongs to a different site than the current
+        # one.
+        another_site = SiteFactory(name='a different site')
+        Site.objects.get_current = Mock(return_value=another_site)
+
+        queryset = ConcreteSiteContent.objects.current_site()
+
+        self.assertNotIn(content, queryset)
