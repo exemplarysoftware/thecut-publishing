@@ -16,6 +16,7 @@ try:
             "django.contrib.auth",
             "django.contrib.contenttypes",
             "django.contrib.sites",
+            "tagging",
             "thecut.publishing",
             "test_app",
         ],

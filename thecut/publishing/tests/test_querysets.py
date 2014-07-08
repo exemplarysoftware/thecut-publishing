@@ -4,7 +4,10 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import timedelta
 from freezegun import freeze_time
-from test_app.models import ConcretePublishableResource, ConcretePublishableResourceFactory
+from mock import Mock
+from test_app.models import (
+    ConcreteContent, ConcreteContentFactory, ConcretePublishableResource,
+    ConcretePublishableResourceFactory)
 
 
 class TestPublishableResourceQuerySetFeatured(TestCase):
@@ -50,3 +53,30 @@ class TestPublishableResourceQuerySetActive(TestCase):
             queryset = ConcretePublishableResource.objects.active()
 
         self.assertIn(active, queryset)
+
+
+class TestContentQuerySetIndexable(TestCase):
+
+    def test_includes_content_with_is_indexable_true(self):
+        indexable = ConcreteContentFactory(is_indexable=True)
+
+        queryset = ConcreteContent.objects.indexable()
+
+        self.assertIn(indexable, queryset)
+
+    def test_excludes_content_with_is_indexable_false(self):
+        unindexable = ConcreteContentFactory(is_indexable=False)
+
+        queryset = ConcreteContent.objects.indexable()
+
+        self.assertNotIn(unindexable, queryset)
+
+    def test_calls_active_on_self(self):
+        # Ensure we're also filtering inactive content out of the results when
+        # finding indexable content.
+        indexable = ConcreteContentFactory(is_indexable=True)
+        ConcreteContent.objects.active = Mock()
+
+        queryset = ConcreteContent.objects.indexable()
+
+        self.assertTrue(ConcreteContent.objects.active.called_once)
