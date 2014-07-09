@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import timedelta
 from freezegun import freeze_time
-from mock import Mock
+from mock import Mock, patch
 from test_app.models import (
     ConcreteContent, ConcreteContentFactory, ConcretePublishableResource,
     ConcretePublishableResourceFactory, ConcreteSiteContent,
@@ -73,14 +73,15 @@ class TestContentQuerySetIndexable(TestCase):
 
         self.assertNotIn(unindexable, queryset)
 
-    def test_calls_active_on_self(self):
+    @patch('thecut.publishing.querysets.ContentQuerySet.active')
+    def test_calls_active_on_self(self, mock_active):
         # Ensure we're also filtering inactive content out of the results when
         # finding indexable content.
         ConcreteContent.objects.active = Mock()
 
         ConcreteContent.objects.indexable()
 
-        self.assertTrue(ConcreteContent.objects.active.called_once)
+        self.assertTrue(mock_active.called)
 
 
 class TestSiteContentQuerySetCurrentSite(TestCase):
