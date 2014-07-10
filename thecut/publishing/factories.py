@@ -21,7 +21,8 @@ faker = FakerFactory.create()
 
 class ContentFactory(AuthorshipFactory):
 
-    ABSTRACT_FACTORY = True
+    class Meta(object):
+        abstract = True
 
     title = factory.Sequence(lambda n: 'Content {0}'.format(n))
 
@@ -48,7 +49,8 @@ def _generate_ul(item_quantity):
 
 class ContentFakerFactory(ContentFactory):
 
-    ABSTRACT_FACTORY = True
+    class Meta(object):
+        abstract = True
 
     title = factory.LazyAttribute(lambda o: faker.company())
 
