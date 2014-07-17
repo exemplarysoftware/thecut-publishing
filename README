@@ -24,10 +24,10 @@ tests::
     source /path/to/virtual/environment/bin/activate
 
 To run the tests for your current environemt::
-    make test
+    python runtests.py
 
 To run the tests against Python versions 2.6, 2.7 and 3.4::
-    make test-all
+    tox
 
 Note that if you've changed the packages that are required for the app, you'll
 need to re-build the tox environment from scratch (see
