@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 from model_utils.managers import PassThroughManager
 from tagging.fields import TagField
+from taggit.managers import TaggableManager
 from thecut.authorship.models import Authorship
 from thecut.publishing import settings, querysets, utils
 
@@ -62,22 +63,19 @@ class Content(PublishableResource):
     headline = models.CharField(max_length=200, blank=True, default='')
     content = models.TextField(blank=True, default='')
     featured_content = models.TextField(blank=True, default='')
+    tags = TaggableManager(blank=True)
 
     is_indexable = models.BooleanField(
         'indexable',
         db_index=True,
         default=True,
         help_text='Should this page be indexed by search engines?')
+
     meta_description = models.CharField(
         max_length=200,
         blank=True,
         default='',
         help_text='Optional short description for use by search engines.')
-    tags = TagField(
-        blank=True,
-        default='',
-        help_text='Separate tags with spaces, put quotes around multiple-word '
-                  'tags.')
 
     template = models.CharField(max_length=100, blank=True, default='',
                                 help_text='Example: "app/model_detail.html".')
