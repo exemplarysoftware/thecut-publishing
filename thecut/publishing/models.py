@@ -4,7 +4,6 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.utils import timezone
 from model_utils.managers import PassThroughManager
-from tagging.fields import TagField
 from taggit.managers import TaggableManager
 from thecut.authorship.models import Authorship
 from thecut.publishing import settings, querysets, utils
