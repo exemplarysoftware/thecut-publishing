@@ -11,6 +11,5 @@ setup(
     version=get_git_version(),
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['django-tagging==0.3.1',  # Required to run south migrations.
-                      'django-taggit==0.12'],
+    install_requires=['django-taggit==0.12.2'],
 )
