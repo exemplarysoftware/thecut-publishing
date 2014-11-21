@@ -4,7 +4,6 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
-from model_utils.managers import PassThroughManager
 from taggit.managers import TaggableManager
 from thecut.authorship.models import Authorship
 from thecut.publishing import settings, querysets, utils
@@ -40,8 +39,7 @@ class PublishableResource(Authorship):
     publish_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
                                    blank=True, related_name='+')
 
-    objects = PassThroughManager().for_queryset_class(
-        querysets.PublishableResourceQuerySet)()
+    objects = querysets.PublishableResourceQuerySet.as_manager()
 
     class Meta(object):
         abstract = True
@@ -78,8 +76,7 @@ class Content(PublishableResource):
     template = models.CharField(max_length=100, blank=True, default='',
                                 help_text='Example: "app/model_detail.html".')
 
-    objects = PassThroughManager().for_queryset_class(
-        querysets.ContentQuerySet)()
+    objects = querysets.ContentQuerySet.as_manager()
 
     class Meta(PublishableResource.Meta):
         abstract = True
@@ -100,8 +97,7 @@ class SiteContent(Content):
 
     site = models.ForeignKey('sites.Site', default=get_current_site)
 
-    objects = PassThroughManager().for_queryset_class(
-        querysets.SiteContentQuerySet)()
+    objects = querysets.SiteContentQuerySet.as_manager()
 
     class Meta(Content.Meta):
         abstract = True
