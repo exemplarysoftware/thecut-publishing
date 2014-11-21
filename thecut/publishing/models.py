@@ -3,16 +3,15 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 from model_utils.managers import PassThroughManager
 from taggit.managers import TaggableManager
 from thecut.authorship.models import Authorship
 from thecut.publishing import settings, querysets, utils
 
 
-try:
-    from django.utils.encoding import python_2_unicode_compatible
-except ImportError:
-    from thecut.publishing.utils import python_2_unicode_compatible
+def get_current_site():
+    return Site.objects.get_current().pk
 
 
 class PublishableResource(Authorship):
@@ -99,7 +98,7 @@ class SiteContent(Content):
 
     """
 
-    site = models.ForeignKey('sites.Site', default=Site.objects.get_current)
+    site = models.ForeignKey('sites.Site', default=get_current_site)
 
     objects = PassThroughManager().for_queryset_class(
         querysets.SiteContentQuerySet)()
