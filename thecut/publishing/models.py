@@ -11,7 +11,10 @@ from thecut.publishing import settings, querysets, utils
 
 
 def get_current_site():
-    return Site.objects.get_current().pk
+    try:
+        return Site.objects.get_current().pk
+    except Site.DoesNotExist:
+        pass
 
 
 class PublishableResource(Authorship):
