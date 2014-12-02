@@ -2,11 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 from django.contrib.sites.models import Site
 from django.db import models
-
-try:
-    from django.utils import timezone
-except ImportError:
-    from datetime import datetime as timezone
+from django.utils import timezone
 
 
 class PublishableResourceQuerySet(models.query.QuerySet):

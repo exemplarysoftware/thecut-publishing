@@ -11,7 +11,5 @@ setup(
     version=get_git_version(),
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['django-model-utils>=1.2.0',
-                      'django-tagging==0.3.1',  # Required to run migrations.
-                      'django-taggit==0.12'],
+    install_requires=['django-model-utils>=2.2.0,<3', 'django-taggit==0.12.2'],
 )
