@@ -64,7 +64,7 @@ class Content(PublishableResource):
     headline = models.CharField(max_length=200, blank=True, default='')
     content = models.TextField(blank=True, default='')
     featured_content = models.TextField(blank=True, default='')
-    tags = TaggableManager(blank=True)
+    tags = TaggableManager(blank=True, related_name='+')
 
     is_indexable = models.BooleanField(
         'indexable',
