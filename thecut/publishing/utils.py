@@ -12,6 +12,8 @@ except ImportError:
 def generate_unique_slug(text, queryset, slug_field='slug', iteration=0):
     """Generate a unique slug for a model from the provided text."""
     slug = slugify(text)
+    if not slug:
+        slug = '-'
 
     if iteration > 0:
         slug = '{0}-{1}'.format(iteration, slug)
