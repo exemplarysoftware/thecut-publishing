@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib import messages
 from django.core.exceptions import FieldDoesNotExist
 
+
 def enable(model_admin, request, queryset):
     """'Enable' every object in the queryset."""
     try:
