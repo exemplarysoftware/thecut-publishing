@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+import django
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils import timezone
@@ -64,7 +65,11 @@ class Content(PublishableResource):
     headline = models.CharField(max_length=200, blank=True, default='')
     content = models.TextField(blank=True, default='')
     featured_content = models.TextField(blank=True, default='')
-    tags = TaggableManager(blank=True, related_name='+')
+
+    if django.VERSION < (1, 7):
+        tags = TaggableManager(blank=True)
+    else:
+        tags = TaggableManager(blank=True, related_name='+')
 
     is_indexable = models.BooleanField(
         'indexable',
