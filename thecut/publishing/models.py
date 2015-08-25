@@ -37,7 +37,8 @@ class PublishableResource(Authorship):
                   'wish this item to expire.')
 
     publish_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
-                                   blank=True, related_name='+')
+                                   blank=True, related_name='+',
+                                   on_delete=models.SET_NULL)
 
     objects = PassThroughManager().for_queryset_class(
         querysets.PublishableResourceQuerySet)()
