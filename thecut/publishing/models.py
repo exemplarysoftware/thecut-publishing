@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import django
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils import timezone
@@ -9,6 +8,7 @@ from model_utils.managers import PassThroughManager
 from taggit.managers import TaggableManager
 from thecut.authorship.models import Authorship
 from thecut.publishing import settings, querysets, utils
+import django
 
 
 def get_current_site():
@@ -19,24 +19,19 @@ def get_current_site():
 
 
 class PublishableResource(Authorship):
-    """Abstract resource model with publishing related fields.
-
-    """
+    """Abstract resource model with publishing related fields."""
 
     is_enabled = models.BooleanField('enabled', db_index=True, default=True)
+
     is_featured = models.BooleanField('featured', db_index=True, default=False)
 
     publish_at = models.DateTimeField(
-        'publish date & time',
-        db_index=True,
-        default=timezone.now,
+        'publish date & time', db_index=True, default=timezone.now,
         help_text='This item will only be viewable on the website if it is '
                   'enabled, and this date and time has past.')
+
     expire_at = models.DateTimeField(
-        'expiry date & time',
-        db_index=True,
-        null=True,
-        blank=True,
+        'expiry date & time', db_index=True, null=True, blank=True,
         help_text='This item will no longer be viewable on the website if '
                   'this date and time has past. Leave blank if you do not '
                   'wish this item to expire.')
@@ -57,13 +52,14 @@ class PublishableResource(Authorship):
 
 @python_2_unicode_compatible
 class Content(PublishableResource):
-    """Abstract model with publishing and content fields.
-
-    """
+    """Abstract model with publishing and content fields."""
 
     title = models.CharField(max_length=200)
+
     headline = models.CharField(max_length=200, blank=True, default='')
+
     content = models.TextField(blank=True, default='')
+
     featured_content = models.TextField(blank=True, default='')
 
     if django.VERSION < (1, 7):
@@ -72,15 +68,11 @@ class Content(PublishableResource):
         tags = TaggableManager(blank=True, related_name='+')
 
     is_indexable = models.BooleanField(
-        'indexable',
-        db_index=True,
-        default=True,
+        'indexable', db_index=True, default=True,
         help_text='Should this page be indexed by search engines?')
 
     meta_description = models.CharField(
-        max_length=200,
-        blank=True,
-        default='',
+        max_length=200, blank=True, default='',
         help_text='Optional short description for use by search engines.')
 
     template = models.CharField(max_length=100, blank=True, default='',
@@ -91,7 +83,7 @@ class Content(PublishableResource):
 
     class Meta(PublishableResource.Meta):
         abstract = True
-        ordering = ('title',)
+        ordering = ['title']
 
     def __str__(self):
         return self.title
@@ -102,9 +94,7 @@ class Content(PublishableResource):
 
 
 class SiteContent(Content):
-    """Abstract model with publishing and content fields, related to a site.
-
-    """
+    """Abstract model with publishing and content fields, related to a site."""
 
     site = models.ForeignKey('sites.Site', default=get_current_site)
 
@@ -117,9 +107,7 @@ class SiteContent(Content):
 
 class SiteContentWithSlug(SiteContent):
     """Abstract model with publishing, content, and slug fields - related to a
-    site.
-
-    """
+    site."""
 
     slug = models.SlugField()
 
