@@ -97,7 +97,8 @@ class Content(PublishableResource):
 class SiteContent(Content):
     """Abstract model with publishing and content fields, related to a site."""
 
-    site = models.ForeignKey('sites.Site', default=get_current_site)
+    site = models.ForeignKey('sites.Site', default=get_current_site,
+                             on_delete=models.PROTECT)
 
     objects = PassThroughManager().for_queryset_class(
         querysets.SiteContentQuerySet)()
