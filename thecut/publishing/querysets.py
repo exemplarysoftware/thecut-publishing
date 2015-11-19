@@ -40,6 +40,14 @@ class PublishableResourceQuerySet(models.query.QuerySet):
         """
         return self.filter(is_enabled=True).published()
 
+    def inactive(self):
+        """Filter for inactive objects (disabled or not published)
+
+        :returns: Filtered queryset
+        :rtype: :py:class:`.PublishableResourceQuerySet`
+        """
+        return self.filter(is_enabled=False) | self.unpublished()
+
     def featured(self):
         """Filter for objects which are featured.
 
