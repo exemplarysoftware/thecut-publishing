@@ -6,10 +6,11 @@ from django.utils import timezone
 from datetime import timedelta
 from freezegun import freeze_time
 from mock import Mock, patch
-from test_app.models import (
-    ConcreteContent, ConcreteContentFactory, ConcretePublishableResource,
-    ConcretePublishableResourceFactory, ConcreteSiteContent,
-    ConcreteSiteContentFactory, SiteFactory)
+from test_app.factories import (ConcreteContentFactory,
+                                ConcretePublishableResourceFactory,
+                                ConcreteSiteContentFactory, SiteFactory)
+from test_app.models import (ConcreteContent, ConcretePublishableResource,
+                             ConcreteSiteContent)
 
 
 class TestPublishableResourceQuerySetFeatured(TestCase):
