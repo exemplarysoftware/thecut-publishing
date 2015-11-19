@@ -38,7 +38,7 @@ class PublishableResourceQuerySet(models.query.QuerySet):
         :returns: Filtered queryset.
         :rtype: :py:class:`.PublishableResourceQuerySet`
         """
-        return self.published().filter(is_enabled=True)
+        return self.filter(is_enabled=True).published()
 
     def featured(self):
         """Filter for objects which are featured.
