@@ -9,34 +9,36 @@ class PublishableResourceQuerySet(models.query.QuerySet):
     """Customised :py:class:`~django.db.models.db.query.QuerySet` for
     :py:class:`~thecut.publishing.models.PublishableResource` model."""
 
-    def active(self):
-        """Filter for objects which are active (enabled, published).
-
-        :returns: Filtered queryset.
-        :rtype: :py:class:`.PublishableResourceQuerySet`
-        """
-        now = timezone.now()
-        return self.filter(is_enabled=True).filter(
-            models.Q(publish_at__lte=now),
-            models.Q(expire_at__isnull=True) | models.Q(expire_at__gte=now))
-
-    def inactive(self):
-        """Filter for objects wich are inactive.
-
-        An object is inactive if it is either:
-        - Not enabled
-        - Expired
-        - Not yet published (published in the future)
+    def published(self):
+        """Filter for published objects.
 
         :returns: Filtered queryset.
         :rtype: :py:class:`.PublishableResourceQuerySet`
         """
         now = timezone.now()
         return self.filter(
-            models.Q(is_enabled=False) |
+            models.Q(expire_at__isnull=True) | models.Q(expire_at__gte=now),
+            publish_at__lte=now)
+
+    def unpublished(self):
+        """Filter for unpublished objects.
+
+        :returns: Filtered queryset.
+        :rtype: :py:class:`.PublishableResourceQuerySet`
+        """
+        now = timezone.now()
+        return self.filter(
             models.Q(publish_at__gt=now) |
             models.Q(expire_at__lte=now)
         )
+
+    def active(self):
+        """Filter for active objects (enabled, published).
+
+        :returns: Filtered queryset.
+        :rtype: :py:class:`.PublishableResourceQuerySet`
+        """
+        return self.published().filter(is_enabled=True)
 
     def featured(self):
         """Filter for objects which are featured.
