@@ -13,8 +13,7 @@ class PublishableResourceQuerySet(models.query.QuerySet):
         """Filter for objects which are active (enabled, published).
 
         :returns: Filtered queryset.
-        :rtype: :py:class:`.BookingQuerySet`
-
+        :rtype: :py:class:`.PublishableResourceQuerySet`
         """
         now = timezone.now()
         return self.filter(is_enabled=True).filter(
