@@ -20,6 +20,24 @@ class PublishableResourceQuerySet(models.query.QuerySet):
             models.Q(publish_at__lte=now),
             models.Q(expire_at__isnull=True) | models.Q(expire_at__gte=now))
 
+    def inactive(self):
+        """Filter for objects wich are inactive.
+
+        An object is inactive if it is either:
+        - Not enabled
+        - Expired
+        - Not yet published (published in the future)
+
+        :returns: Filtered queryset.
+        :rtype: :py:class:`.PublishableResourceQuerySet`
+        """
+        now = timezone.now()
+        return self.filter(
+            models.Q(is_enabled=False) |
+            models.Q(publish_at__gt=now) |
+            models.Q(expire_at__lte=now)
+        )
+
     def featured(self):
         """Filter for objects which are featured.
 
