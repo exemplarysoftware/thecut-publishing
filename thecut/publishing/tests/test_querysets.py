@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import timedelta
 from freezegun import freeze_time
-from mock import Mock, patch
+from mock import Mock
 from test_app.factories import (ConcreteContentFactory,
                                 ConcretePublishableResourceFactory,
                                 ConcreteSiteContentFactory, SiteFactory)
@@ -74,15 +74,14 @@ class TestContentQuerySetIndexable(TestCase):
 
         self.assertNotIn(unindexable, queryset)
 
-    @patch('thecut.publishing.querysets.ContentQuerySet.active')
-    def test_calls_active_on_self(self, mock_active):
-        # Ensure we're also filtering inactive content out of the results when
-        # finding indexable content.
-        ConcreteContent.objects.active = Mock()
+    def test_excludes_inactive_content(self):
+        # This isn't a very extensive test. The fact that disabled content
+        # is being filtered is not proof that all inactive content is being
+        # filtered
+        disabled = ConcreteContentFactory(is_enabled=False)
+        queryset = ConcreteContent.objects.indexable()
 
-        ConcreteContent.objects.indexable()
-
-        self.assertTrue(mock_active.called)
+        self.assertNotIn(disabled, queryset)
 
 
 class TestSiteContentQuerySetCurrentSite(TestCase):
