@@ -5,24 +5,31 @@ from django.test import TestCase
 from test_app.factories import ConcreteSiteContentWithSlugFactory
 from test_app.models import ConcreteSiteContentWithSlug
 
+
 class TestGenerateUniqueSlug(TestCase):
 
     """Test for utils.generate_unique_slug()"""
 
-    # TODO: Mocking
-
     def setUp(self):
-        self.c1 = ConcreteSiteContentWithSlugFactory(title='Content A')
-        self.c2 = ConcreteSiteContentWithSlugFactory(title='Content B')
+        self.content = ConcreteSiteContentWithSlugFactory(slug='blah')
 
-    def test_generates_slug_with_unique_slugified_text(self):
+    def test_generates_unique_slug_from_unique_text(self):
+        """Test if a unique slug is generated from a unique string."""
         queryset = ConcreteSiteContentWithSlug.objects.all()
-        self.c1.title = 'A unique title'
-        slug = generate_unique_slug(self.c1.title, queryset)
-        self.assertEqual(slug, 'a-unique-title')
+        slug = generate_unique_slug(text=self.content.slug[::-1],
+                                    queryset=queryset)
+        self.assertFalse(ConcreteSiteContentWithSlug.objects.filter(slug=slug))
 
-    def test_generates_slug_without_unique_slugified_text(self):
+    def test_generates_unique_slug_from_common_text(self):
+        """Test if a unique slug is generated from a common string."""
         queryset = ConcreteSiteContentWithSlug.objects.all()
-        self.c1.title = 'Content B'
-        slug = generate_unique_slug(self.c1.title, queryset)
-        self.assertEqual(slug, '1-content-b')
+        slug = generate_unique_slug(text=self.content.slug,
+                                    queryset=queryset)
+        self.assertFalse(ConcreteSiteContentWithSlug.objects.filter(slug=slug))
+
+    def test_generates_unique_slug_from_empty_string(self):
+        """Test if a slug is generated from an empty string."""
+        queryset = ConcreteSiteContentWithSlug.objects.all()
+        slug = generate_unique_slug(text='',
+                                    queryset=queryset)
+        self.assertFalse(ConcreteSiteContentWithSlug.objects.filter(slug=slug))
