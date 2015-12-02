@@ -11,5 +11,5 @@ setup(
     version=get_git_version(),
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['django-model-utils>=2.2.0,<3', 'django-taggit==0.13.0'],
+    install_requires=['django-model-utils>=2.3.1,<3', 'django-taggit==0.17.3'],
 )

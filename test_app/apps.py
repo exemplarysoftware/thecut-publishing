@@ -5,5 +5,5 @@ from django import apps
 
 class AppConfig(apps.AppConfig):
 
-    name = 'thecut.publishing'
-    label = 'publishing'
+    name = 'test_app'
+    label = 'test_app'

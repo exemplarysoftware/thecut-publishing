@@ -3,10 +3,11 @@ from __future__ import absolute_import, unicode_literals
 from django.test import TestCase
 from mock import Mock
 from thecut.publishing import utils
-from test_app.models import (
-    ConcreteContentFactory, ConcretePublishableResource,
-    ConcretePublishableResourceFactory, ConcreteSiteContentWithSlug,
-    ConcreteSiteContentWithSlugFactory)
+from test_app.factories import (ConcreteContentFactory,
+                                ConcretePublishableResourceFactory,
+                                ConcreteSiteContentWithSlugFactory)
+from test_app.models import (ConcretePublishableResource,
+                             ConcreteSiteContentWithSlug)
 
 
 class TestPublishableResource(TestCase):

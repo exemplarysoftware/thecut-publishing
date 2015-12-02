@@ -5,13 +5,13 @@ import random
 
 try:
     from faker import Factory as FakerFactory
-except ImportError, error:
+except ImportError as error:
     message = '{0}. Try running `pip install fake-factory`.'.format(error)
     raise ImportError(message)
 
 try:
     import factory
-except ImportError, error:
+except ImportError as error:
     message = '{0}. Try running `pip install factory_boy`.'.format(error)
     raise ImportError(message)
 
