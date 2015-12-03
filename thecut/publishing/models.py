@@ -50,6 +50,9 @@ class PublishableResource(Authorship):
     def is_active(self):
         return self in self.__class__.objects.filter(pk=self.pk).active()
 
+    is_active.boolean = True
+    is_active.short_description = 'active'
+
 
 @python_2_unicode_compatible
 class Content(PublishableResource):
