@@ -12,5 +12,6 @@ bin
 include
 lib
 local
+man
 dist
 share
