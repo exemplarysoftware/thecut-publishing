@@ -19,7 +19,6 @@ def generate_unique_slug(text, queryset, slug_field='slug', iteration=0):
     except ObjectDoesNotExist:
         return slug
     else:
-        iteration += 1
         return generate_unique_slug(text, queryset=queryset,
                                     slug_field=slug_field,
-                                    iteration=iteration)
+                                    iteration=iteration + 1)
