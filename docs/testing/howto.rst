@@ -41,7 +41,7 @@ You can use ``virtualenv`` to test without polluting your system's Python enviro
     (thecut-publishing) $ python runtests.py
 
 7. Run the tests with coverage
-    coverage run --branch --omit=lib/*,/home/mark/thecut-authorship/* runtests.py
+    coverage run --branch --omit=lib/*,~/thecut-authorship/* runtests.py
     coverage report -m
 
 Using tox

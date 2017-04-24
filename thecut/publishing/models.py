@@ -7,7 +7,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from taggit.managers import TaggableManager
 from thecut.authorship.models import Authorship
 from thecut.publishing import settings, querysets, utils
-import django
 
 
 def get_current_site():
@@ -64,10 +63,7 @@ class Content(PublishableResource):
 
     featured_content = models.TextField(blank=True, default='')
 
-    if django.VERSION < (1, 7):
-        tags = TaggableManager(blank=True)
-    else:
-        tags = TaggableManager(blank=True, related_name='+')
+    tags = TaggableManager(blank=True, related_name='+')
 
     is_indexable = models.BooleanField(
         'indexable', db_index=True, default=True,

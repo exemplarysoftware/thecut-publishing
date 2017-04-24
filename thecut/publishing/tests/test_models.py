@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from django.test import TestCase
-from mock import Mock
+from django.test import TestCase, TransactionTestCase
+from mock import patch
 from thecut.publishing import utils
 from test_app.factories import (ConcreteContentFactory,
                                 ConcretePublishableResourceFactory,
-                                ConcreteSiteContentWithSlugFactory)
+                                ConcreteSiteContentWithSlugFactory,
+                                ConcreteSiteContentFactory)
 from test_app.models import (ConcretePublishableResource,
                              ConcreteSiteContentWithSlug)
+from django.utils import timezone
+from datetime import timedelta
+from freezegun import freeze_time
 
 
 class TestPublishableResource(TestCase):
@@ -48,8 +52,9 @@ class TestSiteContentWithSlug(TestCase):
 
         self.assertEqual(content.slug, 'a-slug')
 
-    def test_generates_unique_slug_for_content_title_and_site(self):
-        utils.generate_unique_slug = Mock(return_value='a-slug')
+    @patch('thecut.publishing.utils.generate_unique_slug')
+    def test_generates_unique_slug_for_content_title_and_site(self, mock_generate_unique_slug):  # NOQA
+        mock_generate_unique_slug.return_value = 'a-slug'
 
         content = ConcreteSiteContentWithSlugFactory(slug=None)
         queryset = ConcreteSiteContentWithSlug.objects.filter(
@@ -57,3 +62,30 @@ class TestSiteContentWithSlug(TestCase):
 
         self.assertTrue(utils.generate_unique_slug.called_once_with(
             content.title, queryset))
+
+
+class TestGetCurrentSite(TransactionTestCase):
+    def test_site_content_creation(self):
+        ConcreteSiteContentFactory()
+
+
+class TestPublishableResourceModelActive(TestCase):
+
+    def test_excludes_instance_with_published_at_in_the_future(self):
+        later = timezone.now() + timedelta(days=1)
+        inactive = ConcretePublishableResourceFactory(publish_at=later)
+
+        self.assertFalse(inactive.is_active())
+
+    def test_includes_instance_with_published_at_in_the_past(self):
+        earlier = timezone.now() - timedelta(days=1)
+        active = ConcretePublishableResourceFactory(publish_at=earlier)
+
+        self.assertTrue(active.is_active())
+
+    def test_includes_instance_with_published_at_now(self):
+        now = timezone.now()
+        active = ConcretePublishableResourceFactory(publish_at=now)
+
+        with freeze_time(now):
+            self.assertTrue(active.is_active())

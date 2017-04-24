@@ -26,6 +26,7 @@ class TestGenerateUniqueSlug(TestCase):
         slug = generate_unique_slug(text=self.content.slug,
                                     queryset=queryset)
         self.assertFalse(ConcreteSiteContentWithSlug.objects.filter(slug=slug))
+        self.assertEqual(slug, '1-blah')
 
     def test_generates_unique_slug_from_empty_string(self):
         """Test if a slug is generated from an empty string."""

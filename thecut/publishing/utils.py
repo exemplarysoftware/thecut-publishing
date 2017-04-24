@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 from django.core.exceptions import ObjectDoesNotExist
-
-try:
-    from django.utils.text import slugify
-except ImportError:
-    # Pre-Django 1.5
-    from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 
 
 def generate_unique_slug(text, queryset, slug_field='slug', iteration=0):
@@ -26,4 +21,5 @@ def generate_unique_slug(text, queryset, slug_field='slug', iteration=0):
     else:
         iteration += 1
         return generate_unique_slug(text, queryset=queryset,
-                                    slug_field=slug_field, iteration=iteration)
+                                    slug_field=slug_field,
+                                    iteration=iteration)
