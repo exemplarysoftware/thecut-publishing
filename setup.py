@@ -34,7 +34,7 @@ setup(
     include_package_data=True,
 
     # Dependencies
-    install_requires=['django-model-utils==2.3.1', 'django-taggit==0.17.3'],
+    install_requires=['django-taggit==0.22.1'],
 
     # Author information
     author='The Cut Creative',
