@@ -104,3 +104,31 @@ class TestSiteContentQuerySetCurrentSite(TestCase):
         queryset = ConcreteSiteContent.objects.current_site()
 
         self.assertNotIn(content, queryset)
+
+
+class TestPublishableResourceQuerySetInactive(TestCase):
+
+    def test_excludes_instance_with_published_at_in_the_future(self):
+        later = timezone.now() + timedelta(days=1)
+        inactive = ConcretePublishableResourceFactory(publish_at=later)
+
+        queryset = ConcretePublishableResource.objects.inactive()
+
+        self.assertIn(inactive, queryset)
+
+    def test_includes_instance_with_published_at_in_the_past(self):
+        earlier = timezone.now() - timedelta(days=1)
+        active = ConcretePublishableResourceFactory(publish_at=earlier)
+
+        queryset = ConcretePublishableResource.objects.inactive()
+
+        self.assertNotIn(active, queryset)
+
+    def test_includes_instance_with_published_at_now(self):
+        now = timezone.now()
+        active = ConcretePublishableResourceFactory(publish_at=now)
+
+        with freeze_time(now):
+            queryset = ConcretePublishableResource.objects.inactive()
+
+        self.assertNotIn(active, queryset)
