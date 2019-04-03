@@ -34,7 +34,7 @@ setup(
     include_package_data=True,
 
     # Dependencies
-    install_requires=['django-taggit==0.22.1'],
+    install_requires=['django-taggit==0.23.0'],
 
     # Author information
     author='The Cut Creative',
@@ -54,7 +54,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-         'Development Status :: 5 - Production/Stable',
+        'Development Status :: 5 - Production/Stable',
         'Natural Language :: English',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
